@@ -3,11 +3,12 @@ package ru.netology.manager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.netology.domain.TicketBoard;
+import ru.netology.domain.TicketComparator;
 import ru.netology.repository.TicketBoardRepository;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
-class TicketBoardManagerTest {
+class TicketBoardManagerComparatorTest {
     private TicketBoardRepository repository = new TicketBoardRepository();
     TicketBoardManager manager = new TicketBoardManager(repository);
     private TicketBoard first = new TicketBoard(1, 1500, "MOW", "LED", 90);
@@ -25,35 +26,20 @@ class TicketBoardManagerTest {
         manager.add(fifth);
     }
 
-
     @Test
-    public void shouldSearchLine() {
-        TicketBoard[] expected = new TicketBoard[]{first};
-        TicketBoard[] actual = manager.findAll("MOW", "LED");
+    public void shouldComparatorSort() {
+
+        TicketBoard[] actual = manager.findAll("MOW", "KRR", new TicketComparator());
+        TicketBoard[] expected = new TicketBoard[]{fifth, third};
 
         assertArrayEquals(expected, actual);
     }
 
     @Test
-    public void shouldSearchLineAndSort() {
-        TicketBoard[] expected = new TicketBoard[]{third, fifth};
-        TicketBoard[] actual = manager.findAll("MOW", "KRR");
+    public void shouldComparatorSortNotExist() {
 
-        assertArrayEquals(expected, actual);
-    }
-
-    @Test
-    public void shouldSearchLineNotExist() {
-        TicketBoard[] expected = new TicketBoard[]{};
-        TicketBoard[] actual = manager.findAll("VOZ", "KRR");
-
-        assertArrayEquals(expected, actual);
-    }
-
-    @Test
-    public void shouldSearchLineEqualsPrice() {
-        TicketBoard[] expected = new TicketBoard[]{second, fourth};
-        TicketBoard[] actual = manager.findAll("MOW", "VOZ");
+        TicketBoard[] actual = manager.findAll("VOZ", "KRR", new TicketComparator());
+       TicketBoard[] expected = new TicketBoard[]{};
 
         assertArrayEquals(expected, actual);
     }
